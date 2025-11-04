@@ -29,12 +29,38 @@ public:
 
 	public:
 
-		Iterator();
+		Iterator() : current(nullptr) {}
+		Iterator(Node<T>* node) : current(node) {}
 
-		Iterator& operator = (const Iterator& other);
-		T& operator*();
-		Iterator operator++();      // x++;
-		Iterator& operator++();       // ++x;
+		Iterator& operator=(const Iterator& other) {
+			current = other.current;
+			return *this;
+		}
+
+		T& operator*() {
+			return current->value;
+		}
+
+		Iterator& operator++() {
+			if (current != nullptr) {
+				current = current->next;
+			}
+			return *this;
+		}
+
+		Iterator operator++(int) {
+			Iterator temp = *this;
+			++(*this);
+			return temp;
+		}
+
+		bool operator==(const Iterator& other) const {
+			return current == other.current;
+		}
+
+		bool operator!=(const Iterator& other) const {
+			return current != other.current;
+		}
 
 	};
 
