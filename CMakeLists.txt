@@ -16,12 +16,15 @@ include(cmake/function.cmake)         # подхватываем функции,
 add_subdirectory(lib_easy_example)    # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_easy_example
 
 # ВАЖНО: Объединяем ВСЕ подкаталоги из обеих версий:
+add_subdirectory(lib_easy_example)
 add_subdirectory(lib_DSU)
 add_subdirectory(lib_lab_work_2)
-add_subdirectory(lib_Stack)           # Из ветки stack
-add_subdirectory(lib_Algorithms)      # Из ветки stack
-add_subdirectory(lib_List) 
-add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
+add_subdirectory(lib_Stack)       # из stack
+add_subdirectory(lib_Algorithms)  # из stack  
+add_subdirectory(lib_List)        # из list
+add_subdirectory(main)            # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
+
+add_executable(calculator lib_lab_work_2/Calculator.cpp)                
 
 # Исполняемые файлы из разных проектов:
 add_executable(calculator lib_lab_work_2/Calculator.cpp)
