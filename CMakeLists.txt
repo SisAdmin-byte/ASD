@@ -14,21 +14,16 @@ include(cmake/function.cmake)         # подхватываем функции,
               # и для создания исполняемого проекта в отдельные функции
 
 add_subdirectory(lib_easy_example)    # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_easy_example
-
-# ВАЖНО: Объединяем ВСЕ подкаталоги из обеих версий:
-add_subdirectory(lib_easy_example)
 add_subdirectory(lib_DSU)
 add_subdirectory(lib_lab_work_2)
-add_subdirectory(lib_Stack)       # из stack
-add_subdirectory(lib_Algorithms)  # из stack  
-add_subdirectory(lib_List)        # из list
-add_subdirectory(main)            # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
+add_subdirectory(lib_Stack)           # из stack
+add_subdirectory(lib_Algorithms)      # из stack  
+add_subdirectory(lib_List)            # из list
+add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 
-add_executable(calculator lib_lab_work_2/Calculator.cpp)                
-
-# Исполняемые файлы из разных проектов:
+# Исполняемые файлы:
 add_executable(calculator lib_lab_work_2/Calculator.cpp)
-# Если из ветки stack были другие исполняемые файлы, добавьте их здесь
+
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
 
