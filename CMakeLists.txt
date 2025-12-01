@@ -19,9 +19,8 @@ add_subdirectory(lib_lab_work_2)
 add_subdirectory(lib_Stack)           # из stack
 add_subdirectory(lib_Algorithms)      # из stack  
 add_subdirectory(lib_List)            # из list
-add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
+add_subdirectory(main)   s             # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 
-# Исполняемые файлы:
 add_executable(calculator lib_lab_work_2/Calculator.cpp)
 
 
