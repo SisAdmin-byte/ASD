@@ -11,17 +11,21 @@ project(Algorithms-and-Data-Structures)
 
 include(cmake/function.cmake)         # подхватываем функции, реализованные в файле function.cmake
                                       # для простоты мы объединили наборы команд для создания статической библиотеки
-								      # и для создания исполняемого проекта в отдельные функции
+              # и для создания исполняемого проекта в отдельные функции
 
 add_subdirectory(lib_easy_example)    # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_easy_example
-<<<<<<< HEAD
+
+# ВАЖНО: Объединяем ВСЕ подкаталоги из обеих версий:
 add_subdirectory(lib_DSU)
 add_subdirectory(lib_lab_work_2)
-=======
-add_subdirectory(lib_Stack)
-add_subdirectory(lib_Algorithms)
->>>>>>> origin/stack
+add_subdirectory(lib_Stack)           # Из ветки stack
+add_subdirectory(lib_Algorithms)      # Из ветки stack
+add_subdirectory(lib_List) 
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
+
+# Исполняемые файлы из разных проектов:
+add_executable(calculator lib_lab_work_2/Calculator.cpp)
+# Если из ветки stack были другие исполняемые файлы, добавьте их здесь
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
 
@@ -31,5 +35,3 @@ if(BTEST)                             # если тесты подключены
     enable_testing()
     add_subdirectory(tests)
 endif()
-
-
