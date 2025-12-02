@@ -1,7 +1,7 @@
 #include "Algorithms.h"
 
 bool check_balanced_brackets(const std::string& expression) {
-    Stack<char> stack(expression.length());
+    Stack<char> stack;
 
     for (char ch : expression) {
         if (ch == '(' || ch == '{' || ch == '[') {

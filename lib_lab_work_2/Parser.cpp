@@ -54,7 +54,7 @@ List<Lexem> Parser::parse(const std::string& expression) {
             flag = !flag;
         }
         else {
-            std::string error = "Unknown symbol '";
+            std::string error = "Unknown symbol ";
             error += c;
             error += "' on position ";
             error += std::to_string(pos);
@@ -64,7 +64,7 @@ List<Lexem> Parser::parse(const std::string& expression) {
 
     processUnaryMinus(result);
     AbsoluteBars(result);
-    checkSyntax(result);
+    //checkSyntax(result);
 
     return result;
 }
@@ -119,7 +119,6 @@ Lexem Parser::parseWord(const std::string& expr, std::size_t& pos) {
     }
 
     if (isFunction(word)) {
-        // Функции должны иметь высокий приоритет (например, 4)
         if (word == "sin") {
             return Lexem("sin", Function, 0.0, 4, MathFunctions::Sin);
         }
@@ -174,10 +173,8 @@ void Parser::processUnaryMinus(List<Lexem>& lexem) {
         Lexem& lex = *it;
 
         if (lex.isUnOperator()) {
-            // Для унарного минуса добавляем "0" и бинарный "-"
             result.push_back(Lexem("0", Constant, 0.0));
             result.push_back(Lexem("-", Operator, 0.0, 1));
-            // НЕ добавляем исходный унарный оператор!
         }
         else {
             result.push_back(lex);
@@ -205,7 +202,6 @@ void Parser::checkSyntax(List<Lexem>& lexem) {
         throw std::logic_error("Incorrect end of expression");
     }
 
-    // Используем специальное значение для начала
     enum { None, Operand, OperatorType } prev = None;
 
     for (auto it = lexem.begin(); it != lexem.end(); ++it) {
@@ -231,7 +227,6 @@ void Parser::checkSyntax(List<Lexem>& lexem) {
             }
         }
 
-        // Обновляем состояние для следующей итерации
         if (current.isConst() || current.isVar() || current.isBracket()) {
             prev = Operand;
         }
@@ -239,8 +234,7 @@ void Parser::checkSyntax(List<Lexem>& lexem) {
             prev = OperatorType;
         }
         else if (current.isFunction() || current.isBracket()) {
-            // Функции и открывающие скобки - это начало операнда
-            prev = None; // Сброс, чтобы не проверять
+            prev = None;
         }
     }
 }
