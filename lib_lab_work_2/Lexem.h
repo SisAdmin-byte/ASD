@@ -1,6 +1,6 @@
 #include <string>
 #include <stdexcept>
-enum TypeLexem { Constant, Variable, OpenBrecket, ClosedBrecket, Function, Operator, UnOperator, OpenedAbs, ClosedAbs };
+enum TypeLexem { Constant, Variable, OpenBracket, ClosedBracket, Function, Operator, UnOperator, OpenedAbs, ClosedAbs };
 
 
 class Lexem {
@@ -18,11 +18,14 @@ public:
 
 	bool isConst() { return type == TypeLexem::Constant; }
 	bool isVar() { return type == TypeLexem::Variable; }
-	bool isBrecket() { return type == TypeLexem::OpenBrecket || type == TypeLexem::ClosedBrecket; }
+	bool isBracket() { return type == TypeLexem::OpenBracket || type == TypeLexem::ClosedBracket; }
 	bool isFunction() { return type == TypeLexem::Function; }
+	bool isUnOperator() { return type == TypeLexem::UnOperator; }
 	bool isOper() { return type == TypeLexem::Operator; }
 	bool isUnOper() { return type == TypeLexem::UnOperator; }
 	bool isABS() { return type == TypeLexem::OpenedAbs || type == TypeLexem::ClosedAbs; }
+
+	TypeLexem getType() const { return type; }
 
 	double executeFun(double argument) {
 

@@ -1,279 +1,254 @@
 #pragma once
 
-
 template <class T>
 struct Node {
+    T value;
+    Node<T>* next;
+    Node<T>* prev;
 
-	T value;
-	Node<T>* next;
-	Node(T value_, Node<T>* next_ = nullptr);
+    Node(T value_, Node<T>* prev_ = nullptr, Node<T>* next_ = nullptr)
+        : value(value_), prev(prev_), next(next_) {
+    }
 };
-
-template <class T>
-Node<T>::Node(T value_, Node<T>* next_) : value(value_), next(next_) {}
 
 template <class T>
 class List {
-
-	Node<T>* _head;
-	Node<T>* _tail;
-	int _count;
+    Node<T>* _head;
+    Node<T>* _tail;
+    int _count;
 
 public:
+    class Iterator {
+        Node<T>* current;
+
+    public:
+        Iterator() : current(nullptr) {}
+        Iterator(Node<T>* node) : current(node) {}
+
+        Iterator& operator=(const Iterator& other) {
+            current = other.current;
+            return *this;
+        }
+
+        T& operator*() {
+            return current->value;
+        }
 
 
-	class Iterator {
+        Iterator& operator++() {
+            if (current != nullptr) {
+                current = current->next;
+            }
+            return *this;
+        }
+        Iterator operator++(int) {
+            Iterator temp = *this;
+            ++(*this);
+            return temp;
+        }
+
+        Iterator operator--(int) {
+            Iterator temp = (*this);
+            (*this)--;
+            return temp;
+        }
+
+        bool operator==(const Iterator& other) const {
+            return current == other.current;
+        }
+
+        bool operator!=(const Iterator& other) const {
+            return current != other.current;
+        }
+
+        Node<T>* get_node() const { return current; }
+    };
 
 
-		Node<T>* current;
+    List() : _head(nullptr), _tail(nullptr), _count(0) {}
 
-	public:
+    List(const List& other) : _head(nullptr), _tail(nullptr), _count(0) {
+        Node<T>* current = other._head;
+        while (current != nullptr) {
+            push_back(current->value);
+            current = current->next;
+        }
+    }
 
-		Iterator() : current(nullptr) {}
-		Iterator(Node<T>* node) : current(node) {}
+    ~List() {
+        clear();
+    }
 
-		Iterator& operator=(const Iterator& other) {
-			current = other.current;
-			return *this;
-		}
+    List& operator=(const List& other) {
+        if (this != &other) {
+            clear();
+            Node<T>* current = other._head;
+            while (current != nullptr) {
+                push_back(current->value);
+                current = current->next;
+            }
+        }
+        return *this;
+    }
 
-		T& operator*() {
-			return current->value;
-		}
+    Iterator begin() { return Iterator(_head); }
+    Iterator end() { return Iterator(nullptr); }
 
-		Iterator& operator++() {
-			if (current != nullptr) {
-				current = current->next;
-			}
-			return *this;
-		}
+    void push_front(const T& val) {
+        Node<T>* new_node = new Node<T>(val, nullptr, _head);
 
-		Iterator operator++(int) {
-			Iterator temp = *this;
-			++(*this);
-			return temp;
-		}
+        if (_head != nullptr) {
+            _head->prev = new_node;
+        }
 
-		bool operator==(const Iterator& other) const {
-			return current == other.current;
-		}
+        _head = new_node;
 
-		bool operator!=(const Iterator& other) const {
-			return current != other.current;
-		}
+        if (_tail == nullptr) {
+            _tail = new_node;
+        }
 
-	};
+        _count++;
+    }
 
+    void push_back(const T& val) {
+        Node<T>* new_node = new Node<T>(val, _tail, nullptr);
 
+        if (_tail != nullptr) {
+            _tail->next = new_node;
+        }
 
-	List() : _head(nullptr), _tail(nullptr), _count(0) {}
-	List(const List& other) {
-		_head = nullptr;
-		_tail = nullptr;
-		_count = 0;
+        _tail = new_node;
 
-		Node<T>* current = other._head;
-		while (current != nullptr) {
-			push_back(current->value);
-			current = current->next;
-		}
-	}
+        if (_head == nullptr) {
+            _head = new_node;
+        }
 
-	~List() {
-		while (!is_empty()) {
-			pop_front();
-		}
-	}
+        _count++;
+    }
 
-	List& operator=(const List& other) {
-		if (this != &other) {
-			while (!is_empty()) {
-				pop_front();
-			}
+    void insert(const Iterator& position, const T& val) {
+        if (position == begin()) {
+            push_front(val);
+            return;
+        }
 
-			Node<T>* current = other._head;
-			while (current != nullptr) {
-				push_back(current->value);
-				current = current->next;
-			}
-		}
-		return *this;
-	}
+        if (position == end()) {
+            push_back(val);
+            return;
+        }
 
-	void push_front(const T& val);
-	void push_back(const T& val);
-	void insert(int pos, const T& val);
-	void insert(Node<T>* node, const T& val);
+        Node<T>* current_node = position.get_node();
+        Node<T>* prev_node = current_node->prev;
 
-	void pop_front();
-	void pop_back();
-	T front() const;
-	T back() const;
-	void erase(Node<T>* node);
+        Node<T>* new_node = new Node<T>(val, prev_node, current_node);
 
-	bool is_empty();
-	Node<T>* find(const T& val);
-	int size() const { return _count; }
+        prev_node->next = new_node;
+        current_node->prev = new_node;
 
+        _count++;
+    }
+
+    void pop_front() {
+        if (is_empty()) throw "List is empty";
+
+        Node<T>* temp = _head;
+        _head = _head->next;
+
+        if (_head != nullptr) {
+            _head->prev = nullptr;
+        }
+        else {
+            _tail = nullptr;
+        }
+
+        delete temp;
+        _count--;
+    }
+
+    void pop_back() {
+        if (is_empty()) throw "List is empty";
+
+        Node<T>* temp = _tail;
+        _tail = _tail->prev;
+
+        if (_tail != nullptr) {
+            _tail->next = nullptr;
+        }
+        else {
+            _head = nullptr;
+        }
+
+        delete temp;
+        _count--;
+    }
+
+    void erase(const Iterator& position) {
+        if (position == end()) return;
+
+        Node<T>* node_to_delete = position.get_node();
+
+        if (node_to_delete == _head) {
+            pop_front();
+            return;
+        }
+
+        if (node_to_delete == _tail) {
+            pop_back();
+            return;
+        }
+
+        Node<T>* prev_node = node_to_delete->prev;
+        Node<T>* next_node = node_to_delete->next;
+
+        prev_node->next = next_node;
+        next_node->prev = prev_node;
+
+        delete node_to_delete;
+        _count--;
+    }
+
+    T& front() {
+        if (is_empty()) throw "List is empty";
+        return _head->value;
+    }
+
+    const T& front() const {
+        if (is_empty()) throw "List is empty";
+        return _head->value;
+    }
+
+    T& back() {
+        if (is_empty()) throw "List is empty";
+        return _tail->value;
+    }
+
+    const T& back() const {
+        if (is_empty()) throw "List is empty";
+        return _tail->value;
+    }
+
+    bool is_empty() const {
+        return _head == nullptr;
+    }
+
+    int size() const {
+        return _count;
+    }
+
+    void clear() {
+        while (!is_empty()) {
+            pop_front();
+        }
+    }
+
+    Iterator find(const T& val) {
+        Node<T>* current = _head;
+        while (current != nullptr) {
+            if (current->value == val) {
+                return Iterator(current);
+            }
+            current = current->next;
+        }
+        return end();
+    }
 };
-
-template <class T>
-void List<T>::push_front(const T& val) {
-
-	Node<T>* node = new Node<T>(val, _head);
-	node->next = _head;
-	if (is_empty()) _tail = node;
-	_head = node;
-	_count++;
-
-}
-
-template <class T>
-bool List<T>::is_empty() {
-	return _head == nullptr;
-}
-
-template <class T>
-void List<T>::push_back(const T& val) {
-
-	Node<T>* node = new Node<T>(val);
-	// _tail->next = node; // траблы какие-то, я прослушал
-	if (is_empty()) {
-		_head = node;
-		_tail = node;
-		_count++;
-		return;
-	}
-
-	_tail->next = node;
-	_tail = node;
-	++_count;
-	//      nullptr
-	//  (val) ---> Null
-	//  node
-
-}
-
-template <class T>
-void List<T>::insert(Node<T>* node, const T& val) {
-	if (node == nullptr) throw ("Error");
-	Node<T>* new_node = new Node<T>(val, node->next);
-	node->next = new_node;
-	if (_tail == node) {
-		_tail = new_node;
-	}
-	_count++;
-}
-
-template <class T>
-void List<T>::insert(int pos, const T& val) {
-	if (pos < 0 || pos >= _count) throw ("Error");
-
-	if (pos == 0) {
-		push_front(val);
-	}
-	else if (pos == _count - 1) {
-		push_back(val);
-	}
-	else {
-		int cur_pos = 0;
-		Node<T>* cur = _head;
-		while (cur != nullptr) {
-			if (cur_pos == pos - 1) break;
-			cur_pos++;
-			cur = cur->next;
-		}
-
-		if (cur != nullptr) {
-			Node<T>* new_node = new Node<T>(val, cur->next);
-			cur->next = new_node;
-			_count++;
-		}
-	}
-}
-
-template <class T>
-Node<T>* List<T>::find(const T& val) {
-	Node<T>* current = _head;
-	while (current != nullptr) {
-		if (current->value == val) {
-			return current;
-		}
-		current = current->next;
-	}
-	return nullptr;
-}
-
-template <class T>
-void List<T>::pop_front() {
-	if (is_empty()) throw ("List is empty");
-
-	Node<T>* temp = _head;
-	_head = _head->next;
-	delete temp;
-	_count--;
-
-	if (_head == nullptr) {
-		_tail = nullptr;
-	}
-}
-
-template <class T>
-void List<T>::pop_back() {
-	if (is_empty()) throw ("List is empty");
-
-	if (_head == _tail) {
-		delete _head;
-		_head = nullptr;
-		_tail = nullptr;
-		_count = 0;
-		return;
-	}
-
-	Node<T>* current = _head;
-	while (current->next != _tail) {
-		current = current->next;
-	}
-
-	delete _tail;
-	_tail = current;
-	_tail->next = nullptr;
-	_count--;
-}
-
-template <class T>
-T List<T>::front() const {
-	if (is_empty()) throw ("List is empty");
-	return _head->value;
-}
-
-template <class T>
-T List<T>::back() const {
-	if (is_empty()) throw ("List is empty");
-	return _tail->value;
-}
-
-
-template <class T>
-void List<T>::erase(Node<T>* node) {
-	if (node == nullptr || is_empty()) return;
-
-	if (node == _head) {
-		pop_front();
-		return;
-	}
-
-	Node<T>* prev = _head;
-	while (prev != nullptr && prev->next != node) {
-		prev = prev->next;
-	}
-
-	if (prev != nullptr) {
-		prev->next = node->next;
-		if (node == _tail) {
-			_tail = prev;
-		}
-		delete node;
-		_count--;
-	}
-}

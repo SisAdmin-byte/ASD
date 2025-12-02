@@ -4,7 +4,7 @@
 
 
 
-TEST(DSUTest, BasicUnion) {
+TEST(DSUTest1, BasicUnion) {
     DSU dsu(10);
     dsu.unite(0, 1);
     EXPECT_EQ(dsu.find(0), dsu.find(1));
@@ -16,7 +16,7 @@ TEST(DSUTest, BasicUnion) {
     EXPECT_NE(dsu.find(1), dsu.find(3));
 }
 
-TEST(DSUTest, TransitiveUnion) {
+TEST(DSUTest2, TransitiveUnion) {
     DSU dsu(10);
     dsu.unite(0, 1);
     dsu.unite(1, 2);
@@ -26,7 +26,7 @@ TEST(DSUTest, TransitiveUnion) {
     EXPECT_EQ(dsu.find(0), dsu.find(2));
 }
 
-TEST(DSUTest, MultipleUnions) {
+TEST(DSUTest3, MultipleUnions) {
     DSU dsu(10);
     dsu.unite(0, 1);
     dsu.unite(2, 3);
@@ -37,7 +37,7 @@ TEST(DSUTest, MultipleUnions) {
     EXPECT_EQ(dsu.find(0), dsu.find(3));
 }
 
-TEST(DSUTest, SelfUnion) {
+TEST(DSUTest4, SelfUnion) {
     DSU dsu(10);
     int original_root = dsu.find(5);
     dsu.unite(5, 5);
@@ -45,7 +45,7 @@ TEST(DSUTest, SelfUnion) {
 }
 
 
-TEST(DSUTest, RankTest) {
+TEST(DSUTest5, RankTest) {
     DSU small_dsu(3);
 
     small_dsu.unite(0, 1);
