@@ -1,4 +1,5 @@
 #pragma once
+#include <stdexcept>
 
 template <class T>
 struct Node {
@@ -34,22 +35,35 @@ public:
             return current->value;
         }
 
+        const T& operator*() const {
+            return current->value;
+        }
 
+        //  (++it)
         Iterator& operator++() {
             if (current != nullptr) {
                 current = current->next;
             }
             return *this;
         }
+
+        //  (it++)
         Iterator operator++(int) {
             Iterator temp = *this;
             ++(*this);
             return temp;
         }
 
+        Iterator& operator--() {
+            if (current != nullptr) {
+                current = current->prev;
+            }
+            return *this;
+        }
+
         Iterator operator--(int) {
-            Iterator temp = (*this);
-            (*this)--;
+            Iterator temp = *this;
+            --(*this);
             return temp;
         }
 
@@ -64,6 +78,52 @@ public:
         Node<T>* get_node() const { return current; }
     };
 
+    class ConstIterator {
+        const Node<T>* current;
+
+    public:
+        ConstIterator() : current(nullptr) {}
+        ConstIterator(const Node<T>* node) : current(node) {}
+        ConstIterator(const Iterator& it) : current(it.get_node()) {}
+
+        const T& operator*() const {
+            return current->value;
+        }
+
+        ConstIterator& operator++() {
+            if (current != nullptr) {
+                current = current->next;
+            }
+            return *this;
+        }
+
+        ConstIterator operator++(int) {
+            ConstIterator temp = *this;
+            ++(*this);
+            return temp;
+        }
+
+        ConstIterator& operator--() {
+            if (current != nullptr) {
+                current = current->prev;
+            }
+            return *this;
+        }
+
+        ConstIterator operator--(int) {
+            ConstIterator temp = *this;
+            --(*this);
+            return temp;
+        }
+
+        bool operator==(const ConstIterator& other) const {
+            return current == other.current;
+        }
+
+        bool operator!=(const ConstIterator& other) const {
+            return current != other.current;
+        }
+    };
 
     List() : _head(nullptr), _tail(nullptr), _count(0) {}
 
@@ -82,6 +142,7 @@ public:
     List& operator=(const List& other) {
         if (this != &other) {
             clear();
+
             Node<T>* current = other._head;
             while (current != nullptr) {
                 push_back(current->value);
@@ -93,6 +154,9 @@ public:
 
     Iterator begin() { return Iterator(_head); }
     Iterator end() { return Iterator(nullptr); }
+
+    ConstIterator begin() const { return ConstIterator(_head); }
+    ConstIterator end() const { return ConstIterator(nullptr); }
 
     void push_front(const T& val) {
         Node<T>* new_node = new Node<T>(val, nullptr, _head);
@@ -149,7 +213,7 @@ public:
     }
 
     void pop_front() {
-        if (is_empty()) throw "List is empty";
+        if (is_empty()) throw std::logic_error("List is empty");
 
         Node<T>* temp = _head;
         _head = _head->next;
@@ -166,7 +230,7 @@ public:
     }
 
     void pop_back() {
-        if (is_empty()) throw "List is empty";
+        if (is_empty()) throw std::logic_error("List is empty");
 
         Node<T>* temp = _tail;
         _tail = _tail->prev;
@@ -208,22 +272,22 @@ public:
     }
 
     T& front() {
-        if (is_empty()) throw "List is empty";
+        if (is_empty()) throw std::logic_error("List is empty");
         return _head->value;
     }
 
     const T& front() const {
-        if (is_empty()) throw "List is empty";
+        if (is_empty()) throw std::logic_error("List is empty");
         return _head->value;
     }
 
     T& back() {
-        if (is_empty()) throw "List is empty";
+        if (is_empty()) throw std::logic_error("List is empty");
         return _tail->value;
     }
 
     const T& back() const {
-        if (is_empty()) throw "List is empty";
+        if (is_empty()) throw std::logic_error("List is empty");
         return _tail->value;
     }
 
@@ -251,4 +315,133 @@ public:
         }
         return end();
     }
+};
+
+template <class T>
+class TVector {
+private:
+    List<T> _list;
+
+public:
+    using Iterator = typename List<T>::Iterator;
+    using ConstIterator = typename List<T>::ConstIterator;
+
+    TVector() = default;
+
+    TVector(int size) {
+        for (int i = 0; i < size; i++) {
+            push_back(T());
+        }
+    }
+
+    TVector(std::initializer_list<T> data) {
+        for (const auto& item : data) {
+            push_back(item);
+        }
+    }
+
+    TVector(const TVector& other) : _list(other._list) {}
+
+    ~TVector() = default;
+
+    TVector& operator=(const TVector& other) {
+        if (this != &other) {
+            _list = other._list;
+        }
+        return *this;
+    }
+
+    T& operator[](int index) {
+        if (index < 0 || index >= size()) {
+            throw std::logic_error("TVector index out of range");
+        }
+
+        auto it = _list.begin();
+        for (int i = 0; i < index; i++) {
+            ++it;
+        }
+        return *it;
+    }
+
+    const T& operator[](int index) const {
+        if (index < 0 || index >= size()) {
+            throw std::logic_error("TVector index out of range");
+        }
+
+        auto it = _list.begin();
+        for (int i = 0; i < index; i++) {
+            ++it;
+        }
+        return *it;
+    }
+
+    void push_back(const T& value) {
+        _list.push_back(value);
+    }
+
+    void insert(int index, const T& value) {
+        if (index < 0 || index > size()) {
+            throw std::logic_error("TVector index out of range");
+        }
+
+        if (index == 0) {
+            _list.push_front(value);
+        }
+        else if (index == size()) {
+            _list.push_back(value);
+        }
+        else {
+            auto it = _list.begin();
+            for (int i = 0; i < index; i++) {
+                ++it;
+            }
+            _list.insert(it, value);
+        }
+    }
+
+    void erase(int index) {
+        if (index < 0 || index >= size()) {
+            throw std::logic_error("TVector index out of range");
+        }
+
+        auto it = _list.begin();
+        for (int i = 0; i < index; i++) {
+            ++it;
+        }
+        _list.erase(it);
+    }
+
+    void pop_back() {
+        if (!_list.is_empty()) {
+            _list.pop_back();
+        }
+    }
+
+    Iterator begin() { return _list.begin(); }
+    Iterator end() { return _list.end(); }
+
+    ConstIterator begin() const { return _list.begin(); }
+    ConstIterator end() const { return _list.end(); }
+
+    int size() const { return _list.size(); }
+    int capacity() const { return size(); }
+
+    bool empty() const { return _list.is_empty(); }
+
+    T& front() { return _list.front(); }
+    const T& front() const { return _list.front(); }
+
+    T& back() { return _list.back(); }
+    const T& back() const { return _list.back(); }
+
+    Iterator find(const T& value) {
+        return _list.find(value);
+    }
+
+    void clear() {
+        _list.clear();
+    }
+
+    T* data() { return nullptr; }
+    const T* data() const { return nullptr; }
 };

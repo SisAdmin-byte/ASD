@@ -6,9 +6,7 @@
 #include <stdexcept>
 #include "MathFunction.h"
 
-class Parser {
-
-public:
+namespace Parser {
 
     List<Lexem> parse(const std::string& expression);
     bool isFunction(const std::string& str);
@@ -18,4 +16,4 @@ public:
     void processUnaryMinus(List<Lexem>& lexems);
     void checkSyntax(List<Lexem>& lexems);
     void AbsoluteBars(List<Lexem>& lexem);
-};
+}
