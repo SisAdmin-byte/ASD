@@ -58,14 +58,7 @@ bool Expression::allVariablesSet() const {
     return true;
 }
 
-variable* Expression::findVariable(const std::string& name) {
-    for (int i = 0; i < vars.size(); i++) {
-        if (vars[i].name == name) {
-            return &vars[i];
-        }
-    }
-    return nullptr;
-}
+
 
 const variable* Expression::findVariable(const std::string& name) const {
     for (int i = 0; i < vars.size(); i++) {

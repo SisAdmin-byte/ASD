@@ -48,6 +48,5 @@ private:
     double calculatePostfix();
     double getVariableValue(const std::string& name) const;
     void extractVariables();
-    variable* findVariable(const std::string& name);
     const variable* findVariable(const std::string& name) const;
 };
