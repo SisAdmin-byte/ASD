@@ -25,7 +25,6 @@ public:
     int capacity() const;
     void clear();
     int tail() const;
-    void resize(int newCapacity);
 
 };
 
@@ -158,16 +157,4 @@ void Queue<T>::clear() {
 template <class T>
 int Queue<T>::tail() const {
     return (_head + _count) % _capacity;
-}
-
-template <class T>
-void Queue<T>::resize(int newCapacity) {
-    T* newData = new T[newCapacity];
-    for (int i = 0; i < _count; i++) {
-        newData[i] = std::move(_data[(_head + i) % _capacity]);
-    }
-    delete[] _data;
-    _data = newData;
-    _head = 0;
-    _capacity = newCapacity;
 }
