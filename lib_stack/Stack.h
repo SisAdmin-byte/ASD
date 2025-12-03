@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include "List.h"
 template <class T>
 class Stack {
 
@@ -46,7 +47,7 @@ void Stack<T>::push(const T& val) {
     if (is_full()) {
         throw std::logic_error("Queue is full");
     }
-    _data[++_top] = val;
+    _data[_top++] = val;
 
 }
 
@@ -56,7 +57,7 @@ T Stack<T>::pop() {
     if (is_empty()) {
         throw std::logic_error("Stack is empty");
     }
-    --_top;
+    return _data[--_top];
 
 }
 template <class T>
@@ -64,7 +65,7 @@ inline T Stack<T>::top() {
     if (is_empty()) {
         throw std::logic_error("Stack is empty");
     }
-    return _data[_top];
+    return _data[_top - 1];
 }
 
 template <class T>
@@ -73,3 +74,49 @@ void Stack<T>::clear() {
     _top = 0;
 
 }
+
+
+template <class T>
+class StackList {
+private:
+    List<T> _list;
+
+public:
+    StackList() = default;
+
+    void push(const T& val) {
+        _list.push_back(val);
+    }
+
+    T pop() {
+        if (_list.is_empty()) {
+            throw std::logic_error("Stack is empty");
+        }
+        T value = _list.back();
+        _list.pop_back();
+        return value;
+    }
+
+    T& top() {
+        if (_list.is_empty()) {
+            throw std::logic_error("Stack is empty");
+        }
+        return _list.back();
+    }
+
+    bool is_empty() const {
+        return _list.is_empty();
+    }
+
+    int size() const {
+        return _list.size();
+    }
+
+    void clear() {
+        _list.clear();
+    }
+
+    bool is_full() const {
+        return false;
+    }
+};

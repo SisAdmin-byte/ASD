@@ -212,17 +212,8 @@ public:
         return _head->value;
     }
 
-    const T& front() const {
-        if (is_empty()) throw "List is empty";
-        return _head->value;
-    }
 
     T& back() {
-        if (is_empty()) throw "List is empty";
-        return _tail->value;
-    }
-
-    const T& back() const {
         if (is_empty()) throw "List is empty";
         return _tail->value;
     }
