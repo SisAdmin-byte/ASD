@@ -111,7 +111,7 @@ public:
 	T back() const;
 	void erase(Node<T>* node);
 
-	bool is_empty();
+	bool is_empty() const;
 	Node<T>* find(const T& val);
 	int size() const { return _count; }
 
@@ -119,17 +119,16 @@ public:
 
 template <class T>
 void List<T>::push_front(const T& val) {
-
 	Node<T>* node = new Node<T>(val, _head);
-	node->next = _head;
+
 	if (is_empty()) _tail = node;
+
 	_head = node;
 	_count++;
-
 }
 
 template <class T>
-bool List<T>::is_empty() {
+bool List<T>::is_empty() const {
 	return _head == nullptr;
 }
 
@@ -137,7 +136,6 @@ template <class T>
 void List<T>::push_back(const T& val) {
 
 	Node<T>* node = new Node<T>(val);
-	// _tail->next = node; // траблы какие-то, я прослушал
 	if (is_empty()) {
 		_head = node;
 		_tail = node;
@@ -148,6 +146,8 @@ void List<T>::push_back(const T& val) {
 	_tail->next = node;
 	_tail = node;
 	++_count;
+
+
 	//      nullptr
 	//  (val) ---> Null
 	//  node
@@ -213,7 +213,7 @@ void List<T>::pop_front() {
 	delete temp;
 	_count--;
 
-	if (_head == nullptr) {
+	if (is_empty()) {
 		_tail = nullptr;
 	}
 }
