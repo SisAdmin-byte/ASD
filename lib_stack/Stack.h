@@ -85,15 +85,15 @@ public:
     StackList() = default;
 
     void push(const T& val) {
-        _list.push_back(val);
+        _list.push_front(val);
     }
 
     T pop() {
         if (_list.is_empty()) {
             throw std::logic_error("Stack is empty");
         }
-        T value = _list.back();
-        _list.pop_back();
+        T value = _list.front();
+        _list.pop_front();
         return value;
     }
 
@@ -101,7 +101,7 @@ public:
         if (_list.is_empty()) {
             throw std::logic_error("Stack is empty");
         }
-        return _list.back();
+        return _list.front();
     }
 
     bool is_empty() const {

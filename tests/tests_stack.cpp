@@ -27,6 +27,7 @@ TEST(StackTest, PushElements) {
     stack.push(30);
     EXPECT_TRUE(stack.is_full());
     EXPECT_EQ(stack.top(), 30);
+    ASSERT_ANY_THROW(stack.push(40));
 }
 
 TEST(StackTest, PopElements) {
