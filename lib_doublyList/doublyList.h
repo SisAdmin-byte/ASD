@@ -31,9 +31,32 @@ public:
         }
 
         T& operator*() {
+            if (current == nullptr) {
+                throw std::logic_error("Dereferencing nullptr iterator");
+            }
             return current->value;
         }
 
+        const T& operator*() const {
+            if (current == nullptr) {
+                throw std::logic_error("Dereferencing nullptr iterator");
+            }
+            return current->value;
+        }
+
+        T* operator->() {
+            if (current == nullptr) {
+                throw std::logic_error("Arrow operator on nullptr iterator");
+            }
+            return &(current->value);
+        }
+
+        const T* operator->() const {
+            if (current == nullptr) {
+                throw std::logic_error("Arrow operator on nullptr iterator");
+            }
+            return &(current->value);
+        }
 
         Iterator& operator++() {
             if (current != nullptr) {
@@ -41,10 +64,18 @@ public:
             }
             return *this;
         }
+
         Iterator operator++(int) {
             Iterator temp = *this;
             ++(*this);
             return temp;
+        }
+
+        Iterator& operator--() {
+            if (current != nullptr) {
+                current = current->prev;
+            }
+            return *this;
         }
 
         Iterator operator--(int) {
@@ -64,6 +95,82 @@ public:
         Node<T>* get_node() const { return current; }
     };
 
+    class ReverseIterator {
+        Node<T>* current;
+
+    public:
+        ReverseIterator() : current(nullptr) {}
+        ReverseIterator(Node<T>* node) : current(node) {}
+
+        ReverseIterator& operator=(const ReverseIterator& other) {
+            current = other.current;
+            return *this;
+        }
+
+        T& operator*() {
+            if (current == nullptr) {
+                throw std::logic_error("Dereferencing nullptr iterator");
+            }
+            return current->value;
+        }
+
+        const T& operator*() const {
+            if (current == nullptr) {
+                throw std::logic_error("Dereferencing nullptr iterator");
+            }
+            return current->value;
+        }
+
+        T* operator->() {
+            if (current == nullptr) {
+                throw std::logic_error("Arrow operator on nullptr iterator");
+            }
+            return &(current->value);
+        }
+
+        const T* operator->() const {
+            if (current == nullptr) {
+                throw std::logic_error("Arrow operator on nullptr iterator");
+            }
+            return &(current->value);
+        }
+
+        ReverseIterator& operator++() {
+            if (current != nullptr) {
+                current = current->prev;
+            }
+            return *this;
+        }
+
+        ReverseIterator operator++(int) {
+            ReverseIterator temp = *this;
+            ++(*this);
+            return temp;
+        }
+
+        ReverseIterator& operator--() {
+            if (current != nullptr) {
+                current = current->next;
+            }
+            return *this;
+        }
+
+        ReverseIterator operator--(int) {
+            ReverseIterator temp = *this;
+            --(*this);
+            return temp;
+        }
+
+        bool operator==(const ReverseIterator& other) const {
+            return current == other.current;
+        }
+
+        bool operator!=(const ReverseIterator& other) const {
+            return current != other.current;
+        }
+
+        Node<T>* get_node() const { return current; }
+    };
 
     List() : _head(nullptr), _tail(nullptr), _count(0) {}
 
@@ -93,6 +200,9 @@ public:
 
     Iterator begin() { return Iterator(_head); }
     Iterator end() { return Iterator(nullptr); }
+
+    ReverseIterator rbegin() { return ReverseIterator(_tail); }
+    ReverseIterator rend() { return ReverseIterator(nullptr); }
 
     void push_front(const T& val) {
         Node<T>* new_node = new Node<T>(val, nullptr, _head);

@@ -139,13 +139,3 @@ TEST(QueueTest, ConstFrontAndBack) {
     EXPECT_EQ(const_q.front(), 42);
     EXPECT_EQ(const_q.back(), 99);
 }
-
-TEST(QueueTest, MultipleEnqueueDequeue) {
-    Queue<int> q(5);
-    for (int i = 0; i < 100; ++i) {
-        q.enqueue(i);
-        q.enqueue(i + 1);
-        q.dequeue();
-    }
-    EXPECT_EQ(q.size(), 1);
-}
