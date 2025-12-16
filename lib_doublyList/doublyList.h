@@ -18,6 +18,7 @@ class List {
     int _count;
 
 public:
+
     class Iterator {
         Node<T>* current;
 
@@ -361,4 +362,149 @@ public:
         }
         return end();
     }
+
+
+
+
+
+    bool has_cycle_floyd() const {
+        if (_head == nullptr || _head->next == nullptr) {
+            return false;
+        }
+
+        Node<T>* slow = _head;
+        Node<T>* fast = _head;
+
+        while (fast != nullptr && fast->next != nullptr) {
+            slow = slow->next;
+            fast = fast->next->next;
+
+            if (slow == fast) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    bool has_cycle_reverse() {
+        if (_head == nullptr || _head->next == nullptr) {
+            return false;
+        }
+
+        Node<T>* original_head = _head;
+        Node<T>* original_tail = _tail;
+
+        Node<T>* prev = nullptr;
+        Node<T>* current = _head;
+        Node<T>* next = nullptr;
+
+        while (current != nullptr) {
+            next = current->next;
+            current->next = prev;
+            if (prev != nullptr) {
+                prev->prev = current;
+            }
+            prev = current;
+            current = next;
+        }
+
+        _head = prev;
+        if (_head != nullptr) {
+            _head->prev = nullptr;
+        }
+
+        current = _head;
+        Node<T>* next_for_restore = nullptr;
+        prev = nullptr;
+
+        while (current != nullptr) {
+            next_for_restore = current->next;
+            current->next = prev;
+            if (prev != nullptr) {
+                prev->prev = current;
+            }
+            prev = current;
+            current = next_for_restore;
+        }
+
+        _head = prev;
+        if (_head != nullptr) {
+            _head->prev = nullptr;
+        }
+
+        if (_head != nullptr) {
+            Node<T>* temp = _head;
+            while (temp->next != nullptr) {
+                temp = temp->next;
+            }
+            _tail = temp;
+        }
+        else {
+            _tail = nullptr;
+        }
+
+        bool has_cycle = (_head != original_head);
+
+        if (has_cycle) {
+            Node<T>* node = _head;
+            while (node != nullptr) {
+                node->next = nullptr;
+                node->prev = nullptr;
+                node = node->next;
+            }
+
+            _head = original_head;
+            _tail = original_tail;
+
+            if (_head != nullptr && _tail != nullptr) {
+                Node<T>* current_node = _head;
+                while (current_node->next != nullptr) {
+                    current_node = current_node->next;
+                }
+                if (_tail->next != nullptr) {
+                    _tail->next = _head;
+                    _head->prev = _tail;
+                }
+            }
+        }
+
+        return has_cycle;
+    }
+
+
+    Iterator find_cycle_start() {
+        if (_head == nullptr || _head->next == nullptr) {
+            return end();
+        }
+
+        Node<T>* slow = _head;
+        Node<T>* fast = _head;
+        bool has_cycle = false;
+
+        while (fast != nullptr && fast->next != nullptr) {
+            slow = slow->next;
+            fast = fast->next->next;
+
+            if (slow == fast) {
+                has_cycle = true;
+                break;
+            }
+        }
+
+        if (!has_cycle) {
+            return end();
+        }
+
+        slow = _head;
+        while (slow != fast) {
+            slow = slow->next;
+            fast = fast->next;
+        }
+
+        return Iterator(slow);
+    }
+
+
+
 };
