@@ -1,37 +1,74 @@
 // Copyright 2024 Marina Usova
 
-#define EASY_EXAMPLE
-#ifdef EASY_EXAMPLE
+
 
 #include <iostream>
-#include <iomanip>
-#include "../lib_easy_example/easy_example.h"
+#include "DSU.h"
+#include <vector>
 
-int main() {
-  int a, b;
-  float result;
+int countIslands(std::vector<std::vector<int>>& grid) {
+    if (grid.empty() || grid[0].empty()) return 0;
 
-  a = 1; b = 4;
+    int rows = grid.size();
+    int cols = grid[0].size();
 
-  try {
-      result = division(a, b);
-      std::cout << a << " / " << b << " = "
-          << std::setprecision(2) << result << std::endl;
-  } catch (std::exception err) {
-      std::cerr << err.what() << std::endl;
-  }
+    DSU dsu(rows * cols);
 
-  a = 1; b = 0;
+    int directions[4][2] = { {-1, 0}, {1, 0}, {0, -1}, {0, 1} };
 
-  try {
-      result = division(a, b);
-      std::cout << a << " / " << b << " = "
-          << std::setprecision(2) << result << std::endl;
-  } catch (std::exception err) {
-      std::cerr << err.what() << std::endl;
-  }
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            if (grid[i][j] == 1) {
+                int currentIndex = i * cols + j;
 
-  return 0;
+                for (int k = 0; k < 4; k++) {
+                    int newRow = i + directions[k][0];
+                    int newCol = j + directions[k][1];
+
+                    if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols && grid[newRow][newCol] == 1) {
+                        int neighborIndex = newRow * cols + newCol;
+                        dsu.unite(currentIndex, neighborIndex);
+                    }
+                }
+            }
+        }
+    }
+
+    int totalCells = rows * cols;
+    bool* seen = new bool[totalCells];
+    for (int i = 0; i < totalCells; i++) {
+        seen[i] = false;
+    }
+
+    int count = 0;
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            if (grid[i][j] == 1) {
+                int index = i * cols + j;
+                int root = dsu.find(index);
+                if (root != -1 && !seen[root]) {
+                    seen[root] = true;
+                    count++;
+                }
+            }
+        }
+    }
+
+    delete[] seen;
+    return count;
 }
 
-#endif  // EASY_EXAMPLE
+int main() {
+    std::vector<std::vector<int>> grid = {
+        {0, 1, 0, 0, 1},
+        {0, 1, 1, 0, 1},
+        {1, 1, 0, 1, 1},
+        {0, 0, 0, 0, 1},
+        {1, 0, 1, 1, 1}
+    };
+
+    int islandsCount = countIslands(grid);
+    std::cout << "Number of islands: " << islandsCount << std::endl;
+
+    return 0;
+}

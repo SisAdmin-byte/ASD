@@ -1,57 +1,46 @@
 class DSU {
-
-	int* _parent;
-	size_t _size;
-	int* _rank;
+    int* _parent;
+    int* _rank;
+    size_t _size;
 
 public:
+    DSU(size_t size) : _size(size) {
+        _parent = new int[size];
+        _rank = new int[size];
+        for (int i = 0; i < size; i++) {
+            _parent[i] = i;
+            _rank[i] = 0;
+        }
+    }
 
-	DSU(size_t size);
-	void unite(int, int);
-	int find(int);
-	~DSU();
+    ~DSU() {
+        delete[] _parent;
+        delete[] _rank;
+    }
 
+    int find(int x) {
+        if (x < 0 || x >= _size) return -1;
+        if (_parent[x] != x) {
+            _parent[x] = find(_parent[x]);
+        }
+        return _parent[x];
+    }
+
+    void unite(int x, int y) {
+        int rootX = find(x);
+        int rootY = find(y);
+
+        if (rootX == rootY || rootX == -1 || rootY == -1) return;
+
+        if (_rank[rootX] < _rank[rootY]) {
+            _parent[rootX] = rootY;
+        }
+        else if (_rank[rootX] > _rank[rootY]) {
+            _parent[rootY] = rootX;
+        }
+        else {
+            _parent[rootY] = rootX;
+            _rank[rootX]++;
+        }
+    }
 };
-
-DSU::DSU(size_t size) : _size(size) {
-
-	_parent = new int[size];
-	_rank = new int[size];
-	for (int i = 0; i < _size; i++) {
-		_parent[i] = i;
-	}
-
-
-}
-
-DSU::~DSU() {
-
-	delete[] _parent;
-
-}
-
-int DSU::find(int x) {
-
-	if (_parent[x] == x) {
-		return x;
-	}
-	else {
-		return find(_parent[x]);
-	}
-
-}
-
-
-void DSU::unite(int x1, int x2) {
-
-	if (_rank[x1] < _rank[x2]) {
-		_parent[x1] = find(x2);
-	}
-	else {
-		if (_rank[x1] == _rank[x2]) {
-			_rank[x1]++;
-		}
-		_parent[x2] = find(x1);
-	}
-
-}
