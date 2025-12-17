@@ -4,6 +4,7 @@ class DSU {
     size_t _size;
 
 public:
+
     DSU(size_t size) : _size(size) {
         _parent = new int[size];
         _rank = new int[size];
