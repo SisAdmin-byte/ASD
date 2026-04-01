@@ -1,5 +1,5 @@
 #include <utility>
-#include "C:\Users\antoshka\source\Actual\ASD\lib_list\List.h"
+#include "List.h"
 template <typename Tkey, typename Tvalue>
 
 
