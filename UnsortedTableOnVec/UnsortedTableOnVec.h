@@ -13,9 +13,9 @@ public:
 
     void insert(const Tkey& key, const Tvalue& value) override;
     void replace(const Tkey& key, const Tvalue& value) override;
-    Tvalue find(const Tkey& key) const override;
+    Tvalue find(const Tkey key) const override;
     void erase(const Tkey& key) override;
-    std::ostream& print(std::ostream& out) const override;
+    std::ostream& print(std::ostream& out) const noexcept override;
     bool is_empty() const noexcept override;
     bool consist(const Tkey& key) const noexcept override;
 
@@ -44,7 +44,7 @@ void UnsortedTableOnVec<Tkey, Tvalue>::replace(const Tkey& key, const Tvalue& va
 }
 
 template <typename Tkey, typename Tvalue>
-Tvalue UnsortedTableOnVec<Tkey, Tvalue>::find(const Tkey& key) const {
+Tvalue UnsortedTableOnVec<Tkey, Tvalue>::find(const Tkey key) const {
     for (int i = 0; i < _rows.size(); i++) {
         if (_rows[i].first == key) {
             return _rows[i].second;
@@ -65,7 +65,7 @@ void UnsortedTableOnVec<Tkey, Tvalue>::erase(const Tkey& key) {
 }
 
 template <typename Tkey, typename Tvalue>
-std::ostream& UnsortedTableOnVec<Tkey, Tvalue>::print(std::ostream& out) const {
+std::ostream& UnsortedTableOnVec<Tkey, Tvalue>::print(std::ostream& out) const noexcept{
     for (int i = 0; i < _rows.size(); i++) {
         out << _rows[i].first << " : " << _rows[i].second << std::endl;
     }

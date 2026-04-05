@@ -5,6 +5,41 @@
 #include <utility>
 #define STEP_OF_CAPACITY 15
 
+
+template <typename Tkey, typename Tvalue>
+
+class ITable {
+
+public:
+
+	virtual void insert(const Tkey& key, const Tvalue& value) = 0;
+    virtual void replace(const Tkey& key, const Tvalue& value) = 0;
+	virtual Tvalue find(const Tkey key) const = 0;
+	virtual void erase(const Tkey& key) = 0;
+	virtual std::ostream& print(std::ostream& out) const noexcept = 0;
+	virtual bool is_empty() const noexcept = 0;
+	virtual bool consist(const Tkey& key) const noexcept = 0;
+	~ITable(){}
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 template <class T>
 class TVector {
 protected:
@@ -31,6 +66,7 @@ public:
     void pop_back();
     T begin();
     T end();
+    inline bool is_empty() const noexcept;
 };
 
 template <class T>
@@ -172,19 +208,10 @@ void TVector<T>::pop_back() {
         _size--;
     }
 }
-template <typename Tkey, typename Tvalue>
 
-class ITable {
+template <class T>
+inline bool TVector<T>::is_empty() const noexcept {
 
-public:
+    return _size == 0;
 
-	virtual void insert(const Tkey& key, const Tvalue& value) = 0;
-    virtual void replace(const Tkey& key, const Tvalue& value) = 0;
-	virtual Tvalue find(const Tkey key) const = 0;
-	virtual void erase(const Tkey& key) = 0;
-	virtual std::ostream& print(std::ostream& out) const noexcept = 0;
-	virtual bool is_empty() const noexcept = 0;
-	virtual bool consist(const Tkey& key) const noexcept = 0;
-	~ITable(){}
-
-};
+}
