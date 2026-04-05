@@ -26,6 +26,7 @@ add_executable(calculator lib_lab_work_2/Calculator.cpp)
 
 add_subdirectory(Itable)
 add_subdirectory(UnsortedTableOnVec)
+add_subdirectory(SortedTableOnVec)
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
 
