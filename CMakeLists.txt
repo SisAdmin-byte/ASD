@@ -20,12 +20,14 @@ add_subdirectory(lib_Algorithms)      # из stack
 add_subdirectory(lib_List)            # из list
 add_subdirectory(lib_TableOnList)
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
+add_subdirectory(lib_Queue)
 
 
 add_subdirectory(Itable)
 add_subdirectory(UnsortedTableOnVec)
 add_subdirectory(SortedTableOnVec)
-
+add_subdirectory(UnsortedTableOnBinaryTree)
+add_subdirectory(SortedTableOnBinaryTree)
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
 

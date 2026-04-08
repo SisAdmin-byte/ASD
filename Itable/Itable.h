@@ -5,7 +5,6 @@
 #include <utility>
 #define STEP_OF_CAPACITY 15
 
-
 template <typename Tkey, typename Tvalue>
 
 class ITable {
@@ -22,14 +21,11 @@ public:
 	~ITable(){}
 
 };
-
-
-
-
-
-
-
-
+template <typename Tfirst, typename Tsecond>
+std::ostream& operator<<(std::ostream& out, const std::pair<Tfirst, Tsecond>& pair) {
+    out << pair.first << " : " << pair.second;
+    return out;
+}
 
 
 

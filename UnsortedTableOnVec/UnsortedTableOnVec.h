@@ -18,7 +18,6 @@ public:
     std::ostream& print(std::ostream& out) const noexcept override;
     bool is_empty() const noexcept override;
     bool consist(const Tkey& key) const noexcept override;
-
     int size() const { return _rows.size(); }
 };
 

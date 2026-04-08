@@ -1,0 +1,5 @@
+create_project_lib(SortedTableOnBinaryTree)
+add_depend(SortedTableOnBinaryTree List ../lib_list)
+add_depend(SortedTableOnBinaryTree Itable ../Itable)
+add_depend(SortedTableOnBinaryTree Stack ../lib_stack)
+add_depend(SortedTableOnBinaryTree Queue ../lib_queue)

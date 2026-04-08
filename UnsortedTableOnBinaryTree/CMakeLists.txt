@@ -1,0 +1,5 @@
+create_project_lib(UnsortedTableOnBinaryTree)
+add_depend(UnsortedTableOnBinaryTree List ../lib_list)
+add_depend(UnsortedTableOnBinaryTree Itable ../Itable)
+add_depend(UnsortedTableOnBinaryTree Stack ../lib_stack)
+add_depend(UnsortedTableOnBinaryTree Queue ../lib_queue)

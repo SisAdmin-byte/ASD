@@ -317,131 +317,131 @@ public:
     }
 };
 
-template <class T>
-class TVector {
-private:
-    List<T> _list;
-
-public:
-    using Iterator = typename List<T>::Iterator;
-    using ConstIterator = typename List<T>::ConstIterator;
-
-    TVector() = default;
-
-    TVector(int size) {
-        for (int i = 0; i < size; i++) {
-            push_back(T());
-        }
-    }
-
-    TVector(std::initializer_list<T> data) {
-        for (const auto& item : data) {
-            push_back(item);
-        }
-    }
-
-    TVector(const TVector& other) : _list(other._list) {}
-
-    ~TVector() = default;
-
-    TVector& operator=(const TVector& other) {
-        if (this != &other) {
-            _list = other._list;
-        }
-        return *this;
-    }
-
-    T& operator[](int index) {
-        if (index < 0 || index >= size()) {
-            throw std::logic_error("TVector index out of range");
-        }
-
-        auto it = _list.begin();
-        for (int i = 0; i < index; i++) {
-            ++it;
-        }
-        return *it;
-    }
-
-    const T& operator[](int index) const {
-        if (index < 0 || index >= size()) {
-            throw std::logic_error("TVector index out of range");
-        }
-
-        auto it = _list.begin();
-        for (int i = 0; i < index; i++) {
-            ++it;
-        }
-        return *it;
-    }
-
-    void push_back(const T& value) {
-        _list.push_back(value);
-    }
-
-    void insert(int index, const T& value) {
-        if (index < 0 || index > size()) {
-            throw std::logic_error("TVector index out of range");
-        }
-
-        if (index == 0) {
-            _list.push_front(value);
-        }
-        else if (index == size()) {
-            _list.push_back(value);
-        }
-        else {
-            auto it = _list.begin();
-            for (int i = 0; i < index; i++) {
-                ++it;
-            }
-            _list.insert(it, value);
-        }
-    }
-
-    void erase(int index) {
-        if (index < 0 || index >= size()) {
-            throw std::logic_error("TVector index out of range");
-        }
-
-        auto it = _list.begin();
-        for (int i = 0; i < index; i++) {
-            ++it;
-        }
-        _list.erase(it);
-    }
-
-    void pop_back() {
-        if (!_list.is_empty()) {
-            _list.pop_back();
-        }
-    }
-
-    Iterator begin() { return _list.begin(); }
-    Iterator end() { return _list.end(); }
-
-    ConstIterator begin() const { return _list.begin(); }
-    ConstIterator end() const { return _list.end(); }
-
-    int size() const { return _list.size(); }
-    int capacity() const { return size(); }
-
-    bool empty() const { return _list.is_empty(); }
-
-    T& front() { return _list.front(); }
-    const T& front() const { return _list.front(); }
-
-    T& back() { return _list.back(); }
-    const T& back() const { return _list.back(); }
-
-    Iterator find(const T& value) {
-        return _list.find(value);
-    }
-
-    void clear() {
-        _list.clear();
-    }
-
-    T* data() { return nullptr; }
-    const T* data() const { return nullptr; }
-};
+//template <class T>
+//class TVector {
+//private:
+//    List<T> _list;
+//
+//public:
+//    using Iterator = typename List<T>::Iterator;
+//    using ConstIterator = typename List<T>::ConstIterator;
+//
+//    TVector() = default;
+//
+//    TVector(int size) {
+//        for (int i = 0; i < size; i++) {
+//            push_back(T());
+//        }
+//    }
+//
+//    TVector(std::initializer_list<T> data) {
+//        for (const auto& item : data) {
+//            push_back(item);
+//        }
+//    }
+//
+//    TVector(const TVector& other) : _list(other._list) {}
+//
+//    ~TVector() = default;
+//
+//    TVector& operator=(const TVector& other) {
+//        if (this != &other) {
+//            _list = other._list;
+//        }
+//        return *this;
+//    }
+//
+//    T& operator[](int index) {
+//        if (index < 0 || index >= size()) {
+//            throw std::logic_error("TVector index out of range");
+//        }
+//
+//        auto it = _list.begin();
+//        for (int i = 0; i < index; i++) {
+//            ++it;
+//        }
+//        return *it;
+//    }
+//
+//    const T& operator[](int index) const {
+//        if (index < 0 || index >= size()) {
+//            throw std::logic_error("TVector index out of range");
+//        }
+//
+//        auto it = _list.begin();
+//        for (int i = 0; i < index; i++) {
+//            ++it;
+//        }
+//        return *it;
+//    }
+//
+//    void push_back(const T& value) {
+//        _list.push_back(value);
+//    }
+//
+//    void insert(int index, const T& value) {
+//        if (index < 0 || index > size()) {
+//            throw std::logic_error("TVector index out of range");
+//        }
+//
+//        if (index == 0) {
+//            _list.push_front(value);
+//        }
+//        else if (index == size()) {
+//            _list.push_back(value);
+//        }
+//        else {
+//            auto it = _list.begin();
+//            for (int i = 0; i < index; i++) {
+//                ++it;
+//            }
+//            _list.insert(it, value);
+//        }
+//    }
+//
+//    void erase(int index) {
+//        if (index < 0 || index >= size()) {
+//            throw std::logic_error("TVector index out of range");
+//        }
+//
+//        auto it = _list.begin();
+//        for (int i = 0; i < index; i++) {
+//            ++it;
+//        }
+//        _list.erase(it);
+//    }
+//
+//    void pop_back() {
+//        if (!_list.is_empty()) {
+//            _list.pop_back();
+//        }
+//    }
+//
+//    Iterator begin() { return _list.begin(); }
+//    Iterator end() { return _list.end(); }
+//
+//    ConstIterator begin() const { return _list.begin(); }
+//    ConstIterator end() const { return _list.end(); }
+//
+//    int size() const { return _list.size(); }
+//    int capacity() const { return size(); }
+//
+//    bool empty() const { return _list.is_empty(); }
+//
+//    T& front() { return _list.front(); }
+//    const T& front() const { return _list.front(); }
+//
+//    T& back() { return _list.back(); }
+//    const T& back() const { return _list.back(); }
+//
+//    Iterator find(const T& value) {
+//        return _list.find(value);
+//    }
+//
+//    void clear() {
+//        _list.clear();
+//    }
+//
+//    T* data() { return nullptr; }
+//    const T* data() const { return nullptr; }
+//};
