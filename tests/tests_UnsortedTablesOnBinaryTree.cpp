@@ -1,4 +1,3 @@
-// test_unsorted_table_on_tree.cpp
 #include <gtest/gtest.h>
 #include "UnsortedTableOnBinaryTree.h"
 
