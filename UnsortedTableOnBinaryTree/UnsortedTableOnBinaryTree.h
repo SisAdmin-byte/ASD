@@ -299,28 +299,28 @@ public:
     void print_all_traversals(std::ostream& out = std::cout) const {
         out << "\n=== Tree Traversals ===" << std::endl;
 
-        out << "Preorder (ÊËÏ): ";
+        out << "Preorder: ";
         TVector<T> pre = preorder();
         for (int i = 0; i < pre.size(); i++) {
             out << pre[i] << " ";
         }
         out << std::endl;
 
-        out << "Inorder (ËÊÏ): ";
+        out << "Inorder: ";
         TVector<T> in = inorder();
         for (int i = 0; i < in.size(); i++) {
             out << in[i] << " ";
         }
         out << std::endl;
 
-        out << "Postorder (ËÏÊ): ";
+        out << "Postorder: ";
         TVector<T> post = postorder();
         for (int i = 0; i < post.size(); i++) {
             out << post[i] << " ";
         }
         out << std::endl;
 
-        out << "Level order (BFS): ";
+        out << "Level order: ";
         TVector<T> level = levelorder();
         for (int i = 0; i < level.size(); i++) {
             out << level[i] << " ";

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include "../UnsortedTableOnBinaryTree.h"
+#include "UnsortedTableOnBinaryTree.h"
 
 
 int main() {
@@ -13,6 +13,8 @@ int main() {
     table.insert("first", 1);
     table.insert("second", 2);
     table.insert("third", 3);
+
+    table.print_all_traversals();
 
     return 0;
 }
