@@ -4,6 +4,20 @@
 #include "Stack.h"
 #include "ITable.h"
 
+template <typename Tkey, typename Tvalue>
+bool operator<(const std::pair<Tkey, Tvalue>& a, const std::pair<Tkey, Tvalue>& b) {
+    return a.first < b.first;
+}
+
+template <typename Tkey, typename Tvalue>
+bool operator>(const std::pair<Tkey, Tvalue>& a, const std::pair<Tkey, Tvalue>& b) {
+    return a.first > b.first;
+}
+
+template <typename Tkey, typename Tvalue>
+bool operator==(const std::pair<Tkey, Tvalue>& a, const std::pair<Tkey, Tvalue>& b) {
+    return a.first == b.first;
+}
 
 template <typename T>
 class BinaryTree {
@@ -65,6 +79,25 @@ private:
     }
 
     Node* find_node(const T& value) {
+        if (!_root) return nullptr;
+
+        Queue<Node*> q;
+        q.enqueue(_root);
+
+        while (!q.empty()) {
+            Node* current = q.front();
+            q.dequeue();
+
+            if (current->data == value) {
+                return current;
+            }
+
+            if (current->left) q.enqueue(current->left);
+            if (current->right) q.enqueue(current->right);
+        }
+        return nullptr;
+    }
+    Node* find_node_by_key(const T& value) const {
         if (!_root) return nullptr;
 
         Queue<Node*> q;
@@ -204,8 +237,13 @@ public:
         _size--;
     }
 
+    const T& find_value(const T& value) const {
+        Node* node = find_node_by_key(value);
+        return node->data;
+    }
+
     bool find(const T& value) const {
-        return find_node(const_cast<T&>(value)) != nullptr;
+        return find_node_by_key(value) != nullptr;
     }
 
     bool is_empty() const {
@@ -258,15 +296,6 @@ public:
         return result;
     }
 
-    void print_pretty(std::ostream& out = std::cout) const {
-        if (!_root) {
-            out << "Tree is empty" << std::endl;
-            return;
-        }
-        print_tree(_root, 0, 4, out);
-        out << std::endl;
-    }
-
     void print_all_traversals(std::ostream& out = std::cout) const {
         out << "\n=== Tree Traversals ===" << std::endl;
 
@@ -305,13 +334,8 @@ class UnsortedTableOnTree : public ITable<Tkey, Tvalue> {
 private:
     BinaryTree<std::pair<Tkey, Tvalue>> _tree;
     std::pair<Tkey, Tvalue> find_pair(const Tkey& key) const {
-        TVector<std::pair<Tkey, Tvalue>> level_order = _tree.levelorder();
-        for (int i = 0; i < level_order.size(); i++) {
-            if (level_order[i].first == key) {
-                return level_order[i];
-            }
-        }
-        throw std::logic_error("Key not found!");
+        std::pair<Tkey, Tvalue> search_pair(key, Tvalue());
+        return _tree.find_value(search_pair);
     }
 
 public:
@@ -319,30 +343,17 @@ public:
     ~UnsortedTableOnTree() = default;
 
     void insert(const Tkey& key, const Tvalue& value) override {
-        try {
-            find_pair(key);
+        std::pair<Tkey, Tvalue> search_pair(key, Tvalue());
+        if (_tree.find(search_pair)) {
             throw std::logic_error("Key already exists!");
         }
-        catch (const std::logic_error& e) {
-            if (std::string(e.what()) == "Key not found!") {
-                _tree.insert(std::make_pair(key, value));
-            }
-            else {
-                throw;
-            }
-        }
+        _tree.insert(std::make_pair(key, value));
     }
 
     void replace(const Tkey& key, const Tvalue& value) override {
-        TVector<std::pair<Tkey, Tvalue>> level_order = _tree.levelorder();
-        for (int i = 0; i < level_order.size(); i++) {
-            if (level_order[i].first == key) {
-                _tree.erase(level_order[i]);
-                _tree.insert(std::make_pair(key, value));
-                return;
-            }
-        }
-        throw std::logic_error("Key not found for replacement!");
+        std::pair<Tkey, Tvalue> search_pair(key, Tvalue());
+        _tree.erase(search_pair);
+        _tree.insert(std::make_pair(key, value));
     }
 
     Tvalue find(const Tkey key) const override {
@@ -351,14 +362,8 @@ public:
     }
 
     void erase(const Tkey& key) override {
-        TVector<std::pair<Tkey, Tvalue>> level_order = _tree.levelorder();
-        for (int i = 0; i < level_order.size(); i++) {
-            if (level_order[i].first == key) {
-                _tree.erase(level_order[i]);
-                return;
-            }
-        }
-        throw std::logic_error("Key not found for erasure!");
+        std::pair<Tkey, Tvalue> erase_pair(key, Tvalue());
+        _tree.erase(erase_pair);
     }
 
     std::ostream& print(std::ostream& out) const noexcept override {
@@ -374,21 +379,12 @@ public:
     }
 
     bool consist(const Tkey& key) const noexcept override {
-        try {
-            find_pair(key);
-            return true;
-        }
-        catch (const std::logic_error&) {
-            return false;
-        }
+        std::pair<Tkey, Tvalue> check_pair(key, Tvalue());
+        return _tree.find(check_pair);
     }
 
     int size() const {
         return _tree.size();
-    }
-
-    void print_tree_pretty(std::ostream& out = std::cout) const {
-        _tree.print_pretty(out);
     }
 
     void print_all_traversals(std::ostream& out = std::cout) const {

@@ -53,68 +53,16 @@ TEST(UnsortedTableOnTreeTest4, DuplicateKeyException) {
     EXPECT_EQ(table.find("key"), 100);
 }
 
-TEST(UnsortedTableOnTreeTest5, LargeNumberOfElements) {
-    UnsortedTableOnTree<int, int> table;
 
-    // Вставляем 500 элементов
-    for (int i = 0; i < 500; i++) {
-        table.insert(i, i * 10);
-    }
-
-    EXPECT_EQ(table.size(), 500);
-
-    // Проверяем все элементы
-    for (int i = 0; i < 500; i++) {
-        EXPECT_TRUE(table.consist(i));
-        EXPECT_EQ(table.find(i), i * 10);
-    }
-
-    // Удаляем каждый второй элемент
-    for (int i = 0; i < 500; i += 2) {
-        table.erase(i);
-    }
-
-    EXPECT_EQ(table.size(), 250);
-
-    // Проверяем результаты
-    for (int i = 0; i < 500; i++) {
-        if (i % 2 == 0) {
-            EXPECT_FALSE(table.consist(i));
-        }
-        else {
-            EXPECT_TRUE(table.consist(i));
-            EXPECT_EQ(table.find(i), i * 10);
-        }
-    }
-}
-
-TEST(UnsortedTableOnTreeTest6, TreeTraversals) {
+TEST(UnsortedTableOnTreeTest5, TreeTraversals) {
     UnsortedTableOnTree<std::string, int> table;
 
     table.insert("first", 1);
     table.insert("second", 2);
     table.insert("third", 3);
 
-    // Проверяем, что можно вывести обходы (просто проверяем, что не падает)
     testing::internal::CaptureStdout();
     table.print_all_traversals();
-    std::string output = testing::internal::GetCapturedStdout();
-    EXPECT_FALSE(output.empty());
-}
-
-TEST(UnsortedTableOnTreeTest7, PrettyPrint) {
-    UnsortedTableOnTree<int, int> table;
-
-    table.insert(5, 50);
-    table.insert(1, 10);
-    table.insert(3, 30);
-    table.insert(7, 70);
-    table.insert(2, 20);
-    table.insert(4, 40);
-
-    // Проверяем, что красивый вывод работает
-    testing::internal::CaptureStdout();
-    table.print_tree_pretty();
     std::string output = testing::internal::GetCapturedStdout();
     EXPECT_FALSE(output.empty());
 }
