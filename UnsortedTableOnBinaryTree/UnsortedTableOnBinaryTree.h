@@ -183,9 +183,6 @@ public:
         }
 
         Node* parent = get_parent_for_insert();
-        if (!parent) {
-            throw std::logic_error("Cannot find parent for insertion");
-        }
 
         Node* new_node = new Node(value);
         new_node->parent = parent;
@@ -198,7 +195,6 @@ public:
         }
         else {
             delete new_node;
-            throw std::logic_error("Parent node has no free slots");
         }
 
         _size++;
@@ -218,9 +214,6 @@ public:
         }
 
         Node* last_node = find_last_node();
-        if (!last_node) {
-            throw std::logic_error("Cannot find last node");
-        }
 
         to_delete->data = last_node->data;
 
