@@ -97,7 +97,7 @@ private:
         }
         return nullptr;
     }
-    Node* find_node_by_key(const T& value) const {
+    Node* find_node_by_key(const T& value) const { // const_cast исправить
         if (!_root) return nullptr;
 
         Queue<Node*> q;

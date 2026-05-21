@@ -13,6 +13,8 @@ int main() {
     table.insert("first", 1);
     table.insert("second", 2);
     table.insert("third", 3);
+    table.insert("fourth", 4);
+    table.insert("fifth", 5);
 
     table.print_all_traversals();
 
