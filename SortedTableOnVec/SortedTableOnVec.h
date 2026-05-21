@@ -22,23 +22,7 @@ class SortedTableOnVec : public ITable<Tkey, Tvalue> {
                 right = mid - 1;
             }
         }
-        return -left - 1;
-    }
-
-    int find_insert_position(const Tkey& key) const {
-        int left = 0;
-        int right = _rows.size();
-
-        while (left < right) {
-            int mid = left + (right - left) / 2;
-            if (_rows[mid].first < key) {
-                left = mid + 1;
-            }
-            else {
-                right = mid;
-            }
-        }
-        return left;
+        return -(left + 1);
     }
 
 public:
@@ -63,7 +47,7 @@ void SortedTableOnVec<Tkey, Tvalue>::insert(const Tkey& key, const Tvalue& value
         throw std::logic_error("Key already exists!");
     }
 
-    int insert_pos = find_insert_position(key);
+    int insert_pos = -pos - 1;
     _rows.insert(insert_pos, std::make_pair(key, value));
 }
 
@@ -99,7 +83,7 @@ void SortedTableOnVec<Tkey, Tvalue>::erase(const Tkey& key) {
 }
 
 template <typename Tkey, typename Tvalue>
-std::ostream& SortedTableOnVec<Tkey, Tvalue>::print(std::ostream& out) const noexcept{
+std::ostream& SortedTableOnVec<Tkey, Tvalue>::print(std::ostream& out) const noexcept {
     for (int i = 0; i < _rows.size(); i++) {
         out << _rows[i].first << " : " << _rows[i].second << std::endl;
     }
