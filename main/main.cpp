@@ -3,20 +3,35 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include "UnsortedTableOnBinaryTree.h"
+#include "HashTable.h"
 
 
 int main() {
-    
-    UnsortedTableOnTree<std::string, int> table;
+    TVector<std::pair<std::string, int>> dict1 = {
+        {"hash", 10072},
+        {"list", 13736},
+        {"vector", 16262},
+        {"massive", 10626},
+        {"table", 10083}
+    };
 
-    table.insert("first", 1);
-    table.insert("second", 2);
-    table.insert("third", 3);
-    table.insert("fourth", 4);
-    table.insert("fifth", 5);
 
-    table.print_all_traversals();
+    TVector<std::pair<std::string, int>> dict2 = {
+        {"table", 22727},
+        {"vector", 20728},
+        {"queue", 28282},
+        {"stack", 20607},
+        {"list", 20618}
+    };
+
+
+
+    HashTable<int> merged = merge_dict(dict1, dict2);
+
+    std::cout << "Combined Dictionary:\n";
+    merged.print(std::cout);
+
+    std::cout << "\nSize: " << merged.size() << std::endl;
 
     return 0;
 }
