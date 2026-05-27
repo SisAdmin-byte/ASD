@@ -1,7 +1,149 @@
-// test_sorted_table_on_bst.cpp
 #include <gtest/gtest.h>
 #include <sstream>
 #include "SortedTableOnBinaryTree.h"
+
+TEST(BSTTest, InsertAndFind) {
+    BinarySearchTree<int> tree;
+
+    tree.insert(10);
+    tree.insert(5);
+    tree.insert(15);
+
+    EXPECT_TRUE(tree.find(10));
+    EXPECT_TRUE(tree.find(5));
+    EXPECT_TRUE(tree.find(15));
+    EXPECT_FALSE(tree.find(20));
+    EXPECT_EQ(tree.size(), 3);
+}
+
+TEST(BSTTest, InsertDuplicate) {
+    BinarySearchTree<int> tree;
+
+    tree.insert(10);
+    EXPECT_THROW(tree.insert(10), std::logic_error);
+}
+
+TEST(BSTTest, EraseLeaf) {
+    BinarySearchTree<int> tree;
+
+    tree.insert(10);
+    tree.insert(5);
+    tree.insert(15);
+
+    tree.erase(5);
+
+    EXPECT_FALSE(tree.find(5));
+    EXPECT_TRUE(tree.find(10));
+    EXPECT_TRUE(tree.find(15));
+    EXPECT_EQ(tree.size(), 2);
+}
+
+TEST(BSTTest, EraseNodeWithOneChild) {
+    BinarySearchTree<int> tree;
+
+    tree.insert(10);
+    tree.insert(5);
+    tree.insert(3);
+
+    tree.erase(5);
+
+    EXPECT_FALSE(tree.find(5));
+    EXPECT_TRUE(tree.find(10));
+    EXPECT_TRUE(tree.find(3));
+    EXPECT_EQ(tree.size(), 2);
+}
+
+TEST(BSTTest, EraseNodeWithTwoChildren) {
+    BinarySearchTree<int> tree;
+
+    tree.insert(10);
+    tree.insert(5);
+    tree.insert(15);
+    tree.insert(3);
+    tree.insert(7);
+
+    tree.erase(5);
+
+    EXPECT_FALSE(tree.find(5));
+    EXPECT_TRUE(tree.find(10));
+    EXPECT_TRUE(tree.find(15));
+    EXPECT_TRUE(tree.find(3));
+    EXPECT_TRUE(tree.find(7));
+    EXPECT_EQ(tree.size(), 4);
+}
+
+TEST(BSTTest, EraseRoot) {
+    BinarySearchTree<int> tree;
+
+    tree.insert(10);
+    tree.insert(5);
+    tree.insert(15);
+
+    tree.erase(10);
+
+    EXPECT_FALSE(tree.find(10));
+    EXPECT_TRUE(tree.find(5));
+    EXPECT_TRUE(tree.find(15));
+    EXPECT_EQ(tree.size(), 2);
+}
+
+TEST(BSTTest, EraseNonExisting) {
+    BinarySearchTree<int> tree;
+
+    tree.insert(10);
+
+    EXPECT_THROW(tree.erase(20), std::logic_error);
+}
+
+TEST(BSTTest, IsEmptyAndClear) {
+    BinarySearchTree<int> tree;
+
+    EXPECT_TRUE(tree.is_empty());
+
+    tree.insert(10);
+    EXPECT_FALSE(tree.is_empty());
+
+    tree.clear();
+    EXPECT_TRUE(tree.is_empty());
+    EXPECT_EQ(tree.size(), 0);
+}
+
+TEST(BSTTest, FindValue) {
+    BinarySearchTree<int> tree;
+
+    tree.insert(10);
+    tree.insert(20);
+
+    EXPECT_EQ(tree.find_value(10), 10);
+    EXPECT_EQ(tree.find_value(20), 20);
+    EXPECT_THROW(tree.find_value(30), std::logic_error);
+}
+
+TEST(BSTTest, Inorder) {
+    BinarySearchTree<int> tree;
+
+    tree.insert(5);
+    tree.insert(3);
+    tree.insert(7);
+    tree.insert(1);
+    tree.insert(9);
+
+    int size;
+    int* result = tree.inorder(size);
+
+    EXPECT_EQ(size, 5);
+    EXPECT_EQ(result[0], 1);
+    EXPECT_EQ(result[1], 3);
+    EXPECT_EQ(result[2], 5);
+    EXPECT_EQ(result[3], 7);
+    EXPECT_EQ(result[4], 9);
+
+    delete[] result;
+}
+
+
+
+
 
 TEST(SortedTableOnBSTTest1, BasicInsertAndFind) {
     SortedTableOnBST<std::string, int> table;

@@ -29,6 +29,9 @@ add_subdirectory(SortedTableOnVec)
 add_subdirectory(UnsortedTableOnBinaryTree)
 add_subdirectory(SortedTableOnBinaryTree)
 add_subdirectory(HashTable)
+add_subdirectory(HeapSort)
+add_subdirectory(TVector)
+add_subdirectory(SortedTableOnAVLTree)
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
 

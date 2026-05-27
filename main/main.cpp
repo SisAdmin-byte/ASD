@@ -4,6 +4,8 @@
 #include <string>
 #include <sstream>
 #include "HashTable.h"
+#include "HeapSort.h"
+#include "ITable.h"
 
 
 int main() {
@@ -24,14 +26,28 @@ int main() {
         {"list", 20618}
     };
 
-
-
     HashTable<int> merged = merge_dict(dict1, dict2);
 
     std::cout << "Combined Dictionary:\n";
     merged.print(std::cout);
 
     std::cout << "\nSize: " << merged.size() << std::endl;
+
+    std::cout << "=========== HeapSort ===========" << std::endl;
+    TVector<int> arr = { 12, 11, 13, 5, 6, 7, 3, 20, 15 };
+    std::cout << "Before sort: ";
+    for (int i = 0; i < arr.size(); i++) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl;
+
+    heapSort(arr);
+
+    std::cout << "After sort: ";
+    for (int i = 0; i < arr.size(); i++) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl;
 
     return 0;
 }
