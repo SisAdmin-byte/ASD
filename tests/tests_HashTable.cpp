@@ -91,3 +91,53 @@ TEST(HashTableTest10, ManyElements) {
         EXPECT_EQ(table.find("key" + std::to_string(i)), i);
     }
 }
+TEST(HashTableTest11, CollisionTest) {
+
+    HashTable<int> table(2);
+
+    table.insert("one", 1);
+    table.insert("two", 2);
+    table.insert("three", 3);
+    table.insert("four", 4);
+    table.insert("five", 5);
+
+    EXPECT_EQ(table.size(), 5);
+    EXPECT_EQ(table.find("one"), 1);
+    EXPECT_EQ(table.find("two"), 2);
+    EXPECT_EQ(table.find("three"), 3);
+    EXPECT_EQ(table.find("four"), 4);
+    EXPECT_EQ(table.find("five"), 5);
+
+    table.erase("three");
+    EXPECT_EQ(table.size(), 4);
+    EXPECT_FALSE(table.consist("three"));
+
+    EXPECT_TRUE(table.consist("one"));
+    EXPECT_TRUE(table.consist("two"));
+    EXPECT_TRUE(table.consist("four"));
+    EXPECT_TRUE(table.consist("five"));
+
+    table.erase("one");
+    EXPECT_EQ(table.size(), 3);
+    EXPECT_FALSE(table.consist("one"));
+
+    EXPECT_TRUE(table.consist("two"));
+    EXPECT_TRUE(table.consist("four"));
+    EXPECT_TRUE(table.consist("five"));
+
+    table.erase("five");
+    EXPECT_EQ(table.size(), 2);
+    EXPECT_FALSE(table.consist("five"));
+
+    EXPECT_TRUE(table.consist("two"));
+    EXPECT_TRUE(table.consist("four"));
+    EXPECT_EQ(table.find("two"), 2);
+    EXPECT_EQ(table.find("four"), 4);
+
+    EXPECT_FALSE(table.is_empty());
+
+    table.erase("two");
+    table.erase("four");
+    EXPECT_TRUE(table.is_empty());
+    EXPECT_EQ(table.size(), 0);
+}

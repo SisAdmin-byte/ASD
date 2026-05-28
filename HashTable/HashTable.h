@@ -17,7 +17,7 @@ private:
     size_t h(const std::string& key) const {
         size_t hash = 0;
         for (char c : key) {
-            hash = hash * 31 + static_cast<unsigned char>(c);
+            hash = hash * 17 + static_cast<unsigned char>(c);
         }
         return hash % _rows.size();
     }

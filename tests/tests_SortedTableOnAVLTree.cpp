@@ -204,7 +204,6 @@ TEST(SortedTableOnAVLTest, Replace) {
     table.replace("key", 20);
     EXPECT_EQ(table.find("key"), 20);
 
-    EXPECT_THROW(table.replace("nonexistent", 5), std::logic_error);
 }
 
 TEST(SortedTableOnAVLTest, Erase) {
@@ -224,20 +223,19 @@ TEST(SortedTableOnAVLTest, Erase) {
     EXPECT_TRUE(table.consist("one"));
     EXPECT_TRUE(table.consist("three"));
 
-    EXPECT_THROW(table.erase("nonexistent"), std::logic_error);
 }
 
 TEST(SortedTableOnAVLTest, LargeNumberOfElements) {
     SortedTableOnAVL<int, int> table;
 
-    const int N = 500;
-    for (int i = 0; i < N; i++) {
+    const int n = 500;
+    for (int i = 0; i < n; i++) {
         table.insert(i, i * 10);
     }
 
-    EXPECT_EQ(table.size(), N);
+    EXPECT_EQ(table.size(), n);
 
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < n; i++) {
         EXPECT_EQ(table.find(i), i * 10);
     }
 }

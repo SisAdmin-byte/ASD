@@ -116,50 +116,47 @@ private:
 
     
       //Балансировка узла
-     
-      //Проверяет баланс-фактор и выполняет нужный поворот.
-     
       //Возможные случаи:
      
-      //1. Лево-левый (LL): balance > 1 и balance(left) >= 0
+      //1. Лево-левый: balance > 1 и balance(left) >= 0
       //   Просто правый поворот
      
       //   ДО:            ПОСЛЕ:
-      //     y (bf=2)       x (bf=0)
-      //    /              / \
-      //   x (bf=1)       A   y
+      //     y (bf = 2)       x (bf = 0)
+      //    /                / \
+      //   x (bf = 1)       A   y
       //  /
       // A
      
-      //2. Право-правый (RR): balance < -1 и balance(right) <= 0
+      //2. Право-правый: balance < -1 и balance(right) <= 0
       //   Просто левый поворот
      
-      //   ДО:            ПОСЛЕ:
-      //   x (bf=-2)       y (bf=0)
-      //    \              / \
-      //     y (bf=-1)    x   C
+      //   ДО:              ПОСЛЕ:
+      //   x (bf = -2)        y (bf = 0)
+      //    \                / \
+      //     y (bf = -1)    x   C
       //      \
       //       C
      
-      //3. Лево-правый (LR): balance > 1 и balance(left) < 0
+      //3. Лево-правый: balance > 1 и balance(left) < 0
       //   Левый поворот на левом ребенке, потом правый поворот
      
       //   ДО:            ПРОМЕЖУТОЧНО:    ПОСЛЕ:
-      //     y (bf=2)       y (bf=2)        B (bf=0)
-      //    /              /               / \
-      //   x (bf=-1)      B (bf=1)        x   y
-      //    \            /
-      //     B          x
+      //     y (bf = 2)       y (bf = 2)        B (bf = 0)
+      //    /                /                 / \
+      //   x (bf = -1)      B (bf = 1)        x   y
+      //    \              /
+      //     B            x
      
-      //4. Право-левый (RL): balance < -1 и balance(right) > 0
+      //4. Право-левый: balance < -1 и balance(right) > 0
       //   Правый поворот на правом ребенке, потом левый поворот
      
       //   ДО:            ПРОМЕЖУТОЧНО:    ПОСЛЕ:
-      //   x (bf=-2)       x (bf=-2)        B (bf=0)
-      //    \               \              / \
-      //     y (bf=1)        B (bf=-1)    x   y
-      //    /                 \
-      //   B                   y
+      //   x (bf = -2)       x (bf = -2)        B (bf = 0)
+      //    \                 \                / \
+      //     y (bf = 1)        B (bf = -1)    x   y
+      //    /                   \
+      //   B                     y
      
     Node* balance(Node* node) {
         if (node == nullptr) {
@@ -169,11 +166,11 @@ private:
         update_height(node);
         int balance_factor = get_balance(node);
 
-        if (balance_factor > 1 && get_balance(node->left) >= 0) {
+        if (balance_factor > 1 && get_balance(node->left) > 0) {
             return rotate_right(node);
         }
 
-        if (balance_factor < -1 && get_balance(node->right) <= 0) {
+        if (balance_factor < -1 && get_balance(node->right) < 0) {
             return rotate_left(node);
         }
 
